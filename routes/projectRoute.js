@@ -29,3 +29,33 @@ router.post('/add',async (req,res) => {
         res.json(error).status(500)
     }
 })
+
+
+router.put('/edit/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const currentrecord = await Projects.findOne({ _id: id })
+        if (!currentrecord) {
+            res.status(404).json({ message: "Project not found !" })
+        }
+        const updateProject = await Projects.findByIdAndUpdate(id, req.body, { new: true })
+        res.status(200).json(updateProject)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const currentrecord = await Projects.findOne({ _id: id })
+        if (!currentrecord) {
+            res.status(404).json({ message: "Project not found !" })
+        }
+        const deleteProject = await Projects.findByIdAndDelete(id)
+        res.status(200).json({ message: "Project Deleted !" })
+    } catch (e) {
+        res.status(500).json(error)
+    }
+})
+
+module.exports = router
